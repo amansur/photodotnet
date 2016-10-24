@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using photodotnet.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -9,8 +8,6 @@ namespace photodotnet.Models
 {
 	public class PhotoRepository : IPhotoRepository
 	{
-		private static ConcurrentDictionary<string, Photo> _photos =
-				  new ConcurrentDictionary<string, Photo>();
 		private readonly PhotoContext _context;
 
 		public PhotoRepository(PhotoContext context)
@@ -26,6 +23,12 @@ namespace photodotnet.Models
 		public void Add(Photo item)
 		{
 			_context.Photo.Add(item);
+		}
+
+		public async Task<Photo> Find(Guid id)
+		{
+			var item = await _context.Photo.FirstAsync(c => c.Id == id);
+			return item;
 		}
 
 		public async Task<Photo> Find(string key)

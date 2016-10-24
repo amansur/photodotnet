@@ -51,7 +51,12 @@ namespace photodotnet
 
             app.UseApplicationInsightsExceptionTelemetry();
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Photo}/{action=Index}/{id?}");
+            });
 
 			DbInitializer.Initialize(context);
 		}
