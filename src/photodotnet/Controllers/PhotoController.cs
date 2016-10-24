@@ -1,19 +1,24 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using photodotnet.Models;
 
 namespace photodotnet.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class PhotoController : Controller
     {
+		private readonly IPhotoRepository _repository;
+		public PhotoController(IPhotoRepository repository)
+		{
+			_repository = repository;
+		}
+
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<Photo>> Get()
         {
-            return new string[] { "value1", "value2" };
+			return await _repository.GetAll();
         }
 
         // GET api/values/5
